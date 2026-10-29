@@ -1,0 +1,4 @@
+// PowerShell
+
+$env:PORT=4000
+npm.cmd start
