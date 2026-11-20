@@ -3,17 +3,10 @@ const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 const { promisify } = require('util');
 
-// En local : SQLite reste dans data/.
-// Sur Railway : le volume persistant est automatiquement indiqué par cette variable.
-// Le volume doit être monté sur /app/storage, et non /app/data, pour laisser
-// le fichier de données initiales properties.json accessible dans l'application.
-const DB_DIRECTORY = process.env.RAILWAY_VOLUME_MOUNT_PATH || path.join(__dirname, 'data');
-const DB_PATH = path.join(DB_DIRECTORY, 'kasa.sqlite3');
+const DB_PATH = path.join(__dirname, 'data', 'kasa.sqlite3');
 const PROPS_JSON_PATH = path.join(__dirname, 'data', 'properties.json');
 
 function openDb() {
-  // Crée le dossier en local si nécessaire ; le volume existe déjà sur Railway.
-  fs.mkdirSync(DB_DIRECTORY, { recursive: true });
   const db = new sqlite3.Database(DB_PATH);
   // Promisify helpers
   db.runAsync = function (sql, params = []) {
